@@ -1,0 +1,34 @@
+{
+  "name": "tivity_code_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext js --ext jsx components || exit 0",
+    "test": "NODE_ENV=test NODE_OPTIONS=--max-old-space-size=8192 node_modules/.bin/ts-mocha test/**/*.spec.ts"
+  },
+  "dependencies": {
+    "@types/factory-girl": "^5.0.12",
+    "@types/sequelize": "^4.28.20",
+    "dotenv": "^16.4.5",
+    "reflect-metadata": "^0.2.1",
+    "sequelize-typescript": "^2.1.6",
+    "serverless": "^3.38.0",
+    "sqlite3": "^5.1.7",
+    "typescript": "^5.4.3"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.30",
+    "@types/should": "^13.0.0",
+    "@types/validator": "^13.11.9",
+    "eslint": "^8.57.0",
+    "eslint-plugin-mocha": "^10.4.1",
+    "factory-girl": "^5.0.4",
+    "mocha": "^10.3.0",
+    "should": "^13.2.3",
+    "should-sinon": "^0.0.6",
+    "ts-mocha": "^10.0.0"
+  }
+}

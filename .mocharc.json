@@ -1,0 +1,10 @@
+{
+  "require": [
+    "should",
+    "should-sinon"
+  ],
+  "recursive": true,
+  "full-trace": true,
+  "timeout": 80000,
+  "exit": true
+}
