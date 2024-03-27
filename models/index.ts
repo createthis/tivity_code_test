@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, ModelCtor, getOptions } from 'sequelize-typescript';
 import dotenv from 'dotenv';
 dotenv.config();
 import configRoot from '../config/config';
@@ -8,10 +8,13 @@ import configRoot from '../config/config';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 let config = configRoot[NODE_ENV];
 let sequelize;
-interface DbSingleton {
-  sequelize: Sequelize;
+type Models = {
+  [key: string]: ModelCtor,
 }
-
+type DbSingleton = {
+  sequelize: Sequelize,
+}
+type DbSingletonWithModels = DbSingleton & Partial<Models>
 if (NODE_ENV === 'test' && process.env.DATABASE_URL) {
   // Paranoia 1: prevent `npm test` from blowing away your production db
   console.log('env test so ignoring DATABASE_URL');
@@ -30,26 +33,33 @@ if (!config.dialect && NODE_ENV !== 'test' && process.env.DATABASE_URL) {
   sequelize = new Sequelize(config.database || '', config.username || '', config.password, config);
 }
 
+const db = {
+  sequelize,
+} as DbSingletonWithModels
+
+const models: ModelCtor[] = [];
 fs
   .readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== 'index.ts'))
   .forEach((file) => {
     /* eslint-disable-next-line @typescript-eslint/no-var-requires */
     const modelObject = require(path.join(__dirname, file));
-    sequelize.addModels([modelObject.default]);
+    const model = modelObject.default;
+    const options = getOptions(model.prototype);
+    const tableName: string = options!.tableName!;
+    models.push(model);
+    db[tableName] = model;
   });
+sequelize.addModels(models);
 
-const db: DbSingleton = {
-  sequelize,
-};
 
 // ------------
 // Associations
 // ------------
 /*
-db.companies.belongsTo(db.industries, {
-  foreignKey: 'industry_id',
-  targetKey: 'id',
+db.service_providers.belongsTo(db.members, {
+  foreignKey: 'service_provider_id', // member
+  targetKey: 'service_provider_id', // service_provider
   constraints: false,
 });
 */

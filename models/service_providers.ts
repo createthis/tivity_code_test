@@ -1,5 +1,6 @@
 import { Table, Column, Model } from 'sequelize-typescript';
-import {DataType} from 'sequelize-typescript';
+import { DataType, HasMany } from 'sequelize-typescript';
+import Members from './members';
 
 /*
 CREATE TYPE reimbursement_cadence AS ENUM ('daily', 'weekly', 'monthly', 'yearly');
@@ -28,4 +29,7 @@ export default class ServiceProviders extends Model {
 
   @Column(DataType.DATE)
   created_at?: Date;
+
+  @HasMany(() => Members, { constraints: false })
+  members?: Members[];
 }

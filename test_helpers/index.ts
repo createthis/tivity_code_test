@@ -1,4 +1,5 @@
 import Models from '../models';
+import { Model } from 'sequelize-typescript';
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const factory_girl = require('factory-girl');
 const adapter = new factory_girl.SequelizeAdapter();
@@ -60,7 +61,8 @@ beforeEach(async function () {
           await Models.sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
         }
         try {
-          //await Models[table].sync({force: true});
+          //console.log('table=', table, ', Models[table]=', Models[table]);
+          await Models[table]!.sync({force: true});
         } catch (e) {
           if (table === 'log_user_action') {
             console.log('sync table=',table,', error=',e);
