@@ -1,5 +1,4 @@
 import {
-  Models,
   factory,
 } from '../../test_helpers';
 import ServiceProvider from '../../models/service_providers';

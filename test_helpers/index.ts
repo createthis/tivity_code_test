@@ -1,7 +1,8 @@
 import Models from '../models';
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const factory_girl = require('factory-girl');
 const adapter = new factory_girl.SequelizeAdapter();
-let factory = factory_girl.factory;
+const factory = factory_girl.factory;
 factory.setAdapter(adapter);
 
 // clean the factory state - necessary for mocha watch
@@ -9,6 +10,7 @@ factory.cleanUp();
 factory.factories = [];
 
 // define factories
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const factories = require('./factories');
 factories.default(factory, Models);
 
@@ -23,19 +25,21 @@ process.on('unhandledRejection', (reason, p) => {
  * treat unhandledRejection as a test failure
  * see https://github.com/mochajs/mocha/issues/2640
  */
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 process.on('unhandledRejection', (reason, p) => {
   throw reason;
 });
 
 let skip_db_sync = false;
 
-let set_skip_db_sync = (value: boolean) => {
+const set_skip_db_sync = (value: boolean) => {
   skip_db_sync = value;
 }
 
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
 let sync_list: any[] = [];
 
-let flushPromises = () => {
+const flushPromises = () => {
   return new Promise(resolve => setImmediate(resolve));
 }
 
@@ -77,12 +81,14 @@ afterEach(() => {
   set_skip_db_sync(false);
 });
 
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
 Models.sequelize.addHook('beforeCreate', (model: any, options: any) => {
   const table_name = model.constructor.options.tableName;
   if (sync_list.includes(table_name)) return;
   sync_list.push(table_name);
 });
 
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars */
 Models.sequelize.addHook('beforeBulkCreate', (models: any, options: any) => {
   for (const model of models) {
     const table_name = model.constructor.options.tableName;

@@ -1,3 +1,7 @@
+import { Options } from 'sequelize';
+export interface ConfigInterface {
+  [key: string]: Options,
+}
 export default {
   development: {
     dialect: "sqlite",
@@ -16,4 +20,4 @@ export default {
     //logging: console.log,
     logging: false
   },
-}
+} as ConfigInterface

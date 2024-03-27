@@ -1,13 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import { Sequelize, Model } from 'sequelize-typescript';
-require('dotenv').config();
+import { Sequelize } from 'sequelize-typescript';
+import dotenv from 'dotenv';
+dotenv.config();
+import configRoot from '../config/config';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-let config = require('../config/config').default[NODE_ENV];
+let config = configRoot[NODE_ENV];
 let sequelize;
 interface DbSingleton {
-  sequelize: any;
+  sequelize: Sequelize;
 }
 
 if (NODE_ENV === 'test' && process.env.DATABASE_URL) {
@@ -20,21 +22,24 @@ if (NODE_ENV === 'test' && process.env.DATABASE_URL) {
 if (!config.dialect && NODE_ENV !== 'test' && process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, config);
 } else if (NODE_ENV === 'test' && process.env.TEST_MYSQL) {
-  config = require('../config/config').default.test_mysql;
+  config = configRoot.test_mysql;
+  if (!config.database) throw new Error('missing database in config');
+  if (!config.username) throw new Error('missing username in config');
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database || '', config.username || '', config.password, config);
 }
 
 fs
   .readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== 'index.ts'))
   .forEach((file) => {
+    /* eslint-disable-next-line @typescript-eslint/no-var-requires */
     const modelObject = require(path.join(__dirname, file));
     sequelize.addModels([modelObject.default]);
   });
 
-let db: DbSingleton = {
+const db: DbSingleton = {
   sequelize,
 };
 
