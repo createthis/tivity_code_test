@@ -1,6 +1,6 @@
-import { Table, Column, Model } from 'sequelize-typescript';
-import { DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import ServiceProviders from './service_providers';
+import Activities from './activities';
 
 /*
 CREATE TYPE member_status AS ENUM ('active', 'removed');
@@ -27,6 +27,9 @@ export default class Members extends Model {
 
   @BelongsTo(() => ServiceProviders, { constraints: false })
   service_provider?: ServiceProviders;
+
+  @HasMany(() => Activities, { constraints: false })
+  activities?: Activities[];
 
   @Column(DataType.STRING(255))
   name?: string;

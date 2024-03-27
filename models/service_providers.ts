@@ -1,5 +1,4 @@
-import { Table, Column, Model } from 'sequelize-typescript';
-import { DataType, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 import Members from './members';
 
 /*

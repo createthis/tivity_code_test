@@ -11,7 +11,7 @@ export default function (factory: any, Models: any) {
     member_id: factory.sequence('members.member_id', (n: number) => `${n}`),
     service_provider_id: factory.sequence('service_providers.service_provider_id', (n: number) => `${n}`),
     name: faker.company.name,
-    member_status: () => faker.helpers.enumValue(member_status),
+    status: () => faker.helpers.enumValue(member_status),
     registration_date: () => new Date(),
     created_at: () => new Date(),
     removed_at: null,
