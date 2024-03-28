@@ -1,5 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import Members from './members';
+import Reimbursements from './reimbursements';
 
 /*
 CREATE TYPE activity_type AS ENUM ('activity', 'adjustment');
@@ -29,8 +30,12 @@ export default class Activities extends Model {
   @BelongsTo(() => Members, { constraints: false })
   member?: Members;
 
+  @ForeignKey(() => Reimbursements)
   @Column(DataType.INTEGER())
   reimbursement_id?: number;
+
+  @BelongsTo(() => Reimbursements, { constraints: false })
+  reimbursement?: Reimbursements;
 
   @Column(DataType.INTEGER())
   parent_activity_id?: number;
