@@ -5,17 +5,20 @@
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ext ts --ext js --ext jsx . || exit 0",
+    "reloadseed": "rm -f db.development.sqlite && NODE_ENV=development ./node_modules/.bin/sequelize db:migrate && NODE_ENV=development ./node_modules/.bin/babel-node ./node_modules/.bin/sequelize db:seed:all --inspect",
+    "dev": "./node_modules/.bin/sls offline",
     "test": "NODE_ENV=test NODE_OPTIONS=--max-old-space-size=8192 node_modules/.bin/ts-mocha test/**/*.spec.ts"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.136",
     "@types/factory-girl": "^5.0.12",
     "@types/sequelize": "^4.28.20",
+    "aws-lambda": "^1.0.7",
     "dotenv": "^16.4.5",
     "reflect-metadata": "^0.2.1",
     "sequelize-typescript": "^2.1.6",
     "serverless": "^3.38.0",
-    "sqlite3": "^5.1.7",
-    "typescript": "^5.4.3"
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -30,8 +33,12 @@
     "eslint-plugin-react": "^7.34.1",
     "factory-girl": "^5.0.4",
     "mocha": "^10.3.0",
+    "sequelize-cli": "^6.6.2",
+    "serverless-offline": "^13.3.3",
+    "serverless-plugin-typescript": "^2.1.5",
     "should": "^13.2.3",
     "should-sinon": "^0.0.6",
-    "ts-mocha": "^10.0.0"
+    "ts-mocha": "^10.0.0",
+    "typescript": "^5.4.3"
   }
 }

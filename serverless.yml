@@ -1,0 +1,22 @@
+service: tivityCodeTest
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: dev
+  region: us-east-1
+  environment:
+    NODE_ENV: development
+
+functions:
+  registerServiceProvider:
+    handler: handler.registerServiceProvider
+    events:
+      - http:
+          path: service_provider
+          method: post
+          cors: true
+
