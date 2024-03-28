@@ -37,4 +37,11 @@ functions:
           path: service_provider/members
           method: post
           cors: true
+  submitServiceProviderActivity:
+    handler: handler.submitServiceProviderActivity
+    events:
+      - http:
+          path: service_provider/activity
+          method: post
+          cors: true
 

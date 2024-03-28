@@ -59,6 +59,8 @@ export const registerServiceProviderMembers: APIGatewayProxyHandler = async (eve
     const token = event.headers.Authorization || event.headers.authorization;
     const service_provider_id = getServiceProviderIdFromToken(token.replace('Bearer ', ''));
 
+    // TODO: make sure service_provider_id exists here
+
     const { members } = JSON.parse(event.body);
 
     const createdMembers = await Promise.all(members.map(async (member) => {
@@ -83,6 +85,46 @@ export const registerServiceProviderMembers: APIGatewayProxyHandler = async (eve
     };
   } catch (error) {
     console.error('Error registering service provider members:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: 'Internal server error',
+      }),
+    };
+  }
+};
+
+export const submitServiceProviderActivity: APIGatewayProxyHandler = async (event) => {
+  try {
+    const token = event.headers.Authorization || event.headers.authorization;
+    const service_provider_id = getServiceProviderIdFromToken(token.replace('Bearer ', ''));
+
+    // TODO: verify that the service_provider_id has the right to add activities for the provided member_id(s)
+
+    const { activities } = JSON.parse(event.body);
+
+    const createdActivities = await Promise.all(activities.map(async (activity) => {
+      // Assuming all activities submitted are of type 'activity'
+      return await Models.activities.create({
+        ...activity,
+        activity_type: 'activity',
+      });
+    }));
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        activities: createdActivities.map(activity => ({
+          activity_id: activity.activity_id,
+          member_id: activity.member_id,
+          activity_date: activity.activity_date,
+          description: activity.description,
+          value: activity.value,
+        })),
+      }),
+    };
+  } catch (error) {
+    console.error('Error submitting service provider activity:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({

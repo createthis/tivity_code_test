@@ -30,6 +30,14 @@ curl -X POST http://localhost:3000/dev/service_provider/members \
   -d '{"members": [{"name": "John Doe", "registration_date": "2024-01-01T00:00:00Z"}]}'
 ```
 
+### submitServiceProviderActivity
+```bash
+curl -X POST http://localhost:3000/dev/service_provider/activity \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  -d '{"activities": [{"member_id": 1, "activity_date": "2024-02-01T00:00:00Z", "description": "Test Activity", "value": 100.00}]}'
+```
+
 ## create migrations
 Migrations are used as change control on the database.
 
