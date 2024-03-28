@@ -12,7 +12,7 @@ CREATE TABLE service_providers (
 );
 */
 
-@Table({ tableName: 'service_providers' })
+@Table({ tableName: 'service_providers', underscored: true, updatedAt: false })
 export default class ServiceProviders extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   service_provider_id?: number;

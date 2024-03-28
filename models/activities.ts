@@ -18,7 +18,7 @@ CREATE TABLE activities (
 );
 */
 
-@Table({ tableName: 'activities' })
+@Table({ tableName: 'activities', underscored: true, updatedAt: false })
 export default class Activities extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   activity_id?: number;

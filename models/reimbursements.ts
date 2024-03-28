@@ -18,7 +18,7 @@ CREATE TABLE reimbursements (
 );
 */
 
-@Table({ tableName: 'reimbursements' })
+@Table({ tableName: 'reimbursements', underscored: true, updatedAt: false })
 export default class Reimbursements extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   reimbursement_id?: number;

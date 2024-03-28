@@ -43,14 +43,10 @@ fs
   .filter(file => (file.indexOf('.') !== 0) && (file !== 'index.js') && (file !== 'index.ts') && !file.endsWith('.swp'))
   .forEach((file) => {
     const filePath = path.join(__dirname, file);
-    console.log('filePath=', filePath);
     /* eslint-disable-next-line @typescript-eslint/no-var-requires */
     const modelObject = require(filePath);
     const model = modelObject.default;
-    console.log('model=', model);
-    console.log('model.prototype=', model.prototype);
     const options = getOptions(model.prototype);
-    console.log('options=', options);
     const tableName: string = options!.tableName!;
     models.push(model);
     db[tableName] = model;

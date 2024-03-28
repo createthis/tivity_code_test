@@ -16,7 +16,7 @@ CREATE TABLE members (
 );
 */
 
-@Table({ tableName: 'members' })
+@Table({ tableName: 'members', underscored: true, updatedAt: false })
 export default class Members extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   member_id?: number;

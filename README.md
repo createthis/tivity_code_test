@@ -4,6 +4,7 @@
 ```bash
 npm install
 npm test
+npm run reloadseed # create and populate development database with dummy data
 npm run dev
 ```
 
