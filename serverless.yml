@@ -12,11 +12,29 @@ provider:
     NODE_ENV: development
 
 functions:
+  getServiceProviderJWT:
+    handler: handler.getJWT
+    events:
+      - http:
+          path: service_provider/{service_provider_id}/jwt
+          method: get
+          request:
+            parameters:
+              paths:
+                service_provider_id: true
+          cors: true
   registerServiceProvider:
     handler: handler.registerServiceProvider
     events:
       - http:
           path: service_provider
+          method: post
+          cors: true
+  registerServiceProviderMembers:
+    handler: handler.registerServiceProviderMembers
+    events:
+      - http:
+          path: service_provider/members
           method: post
           cors: true
 

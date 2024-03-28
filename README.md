@@ -16,6 +16,20 @@ curl -X POST http://localhost:3000/dev/service_provider \
   -d '{"name": "Example Name", "reimbursement_percentage": 20.5, "reimbursement_cadence": "monthly"}'
 ```
 
+### getServiceProviderJWT
+```bash
+curl -X GET http://localhost:3000/dev/service_provider/1/jwt \
+  -H 'Content-Type: application/json'
+```
+
+### registerServiceProviderMembers
+```bash
+curl -X POST http://localhost:3000/dev/service_provider/members \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  -d '{"members": [{"name": "John Doe", "registration_date": "2024-01-01T00:00:00Z"}]}'
+```
+
 ## create migrations
 Migrations are used as change control on the database.
 
