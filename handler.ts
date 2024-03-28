@@ -2,6 +2,8 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 import Models from './models';
 import jwt from 'jsonwebtoken';
+import {Op} from 'sequelize';
+import moment from 'moment';
 
 export const registerServiceProvider: APIGatewayProxyHandler = async (event) => {
   try {
@@ -125,6 +127,115 @@ export const submitServiceProviderActivity: APIGatewayProxyHandler = async (even
     };
   } catch (error) {
     console.error('Error submitting service provider activity:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: 'Internal server error',
+      }),
+    };
+  }
+};
+
+export const reimburseServiceProviders: APIGatewayProxyHandler = async () => {
+  try {
+    const serviceProviders = await Models.service_providers.findAll();
+
+    for (const serviceProvider of serviceProviders) {
+      // Find all activities for the serviceProvider that have not been reimbursed
+      const activities = await Models.activities.findAll({
+        include: [{
+          model: Models.members,
+          required: true,
+          where: { service_provider_id: serviceProvider.service_provider_id },
+        }],
+        where: {
+          reimbursement_id: { [Op.is]: null },
+        },
+      });
+
+      if (activities.length > 0) {
+        // Calculate the total activity value
+        const total_activity_value = activities.reduce((sum, activity) => sum + parseFloat(activity.value), 0);
+
+        // Calculate the reimbursed amount
+        const reimbursed_amount = total_activity_value * (serviceProvider.reimbursement_percentage / 100);
+
+        console.log('total_activity_value=', total_activity_value, ', reimbursed_amount=', reimbursed_amount);
+
+        // Insert a reimbursements record
+        await Models.reimbursements.create({
+          service_provider_id: serviceProvider.service_provider_id,
+          cycle_start_date: new Date(), // Set appropriate cycle dates
+          cycle_end_date: new Date(), // Set appropriate cycle dates
+          total_activity_value,
+          reimbursed_amount,
+          status: 'pending',
+        });
+
+        // Update activities with the reimbursement_id if necessary
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Reimbursements processed successfully",
+      }),
+    };
+  } catch (error) {
+    console.error('Error processing reimbursements:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: 'Internal server error',
+      }),
+    };
+  }
+};
+
+export const queryReimbursementStatus: APIGatewayProxyHandler = async (event) => {
+  try {
+    const token = event.headers.Authorization || event.headers.authorization;
+    const service_provider_id = getServiceProviderIdFromToken(token.replace('Bearer ', ''));
+
+    const datetime = event.pathParameters.datetime;
+    const cycleDate = moment.utc(datetime).toDate();
+
+    const reimbursement = await Models.reimbursements.findOne({
+      where: {
+        service_provider_id,
+        cycle_start_date: {
+          [Op.lte]: cycleDate,
+        },
+        cycle_end_date: {
+          [Op.gte]: cycleDate,
+        },
+      },
+    });
+
+    if (!reimbursement) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error: 'No reimbursement found for the given datetime',
+        }),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        reimbursement_id: reimbursement.reimbursement_id,
+        cycle_start_date: reimbursement.cycle_start_date,
+        cycle_end_date: reimbursement.cycle_end_date,
+        total_activity_value: reimbursement.total_activity_value,
+        reimbursed_amount: reimbursement.reimbursed_amount,
+        status: reimbursement.status,
+        processed_at: reimbursement.processed_at,
+      }),
+    };
+  } catch (error) {
+    console.error('Error querying reimbursement status:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({

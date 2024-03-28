@@ -44,4 +44,17 @@ functions:
           path: service_provider/activity
           method: post
           cors: true
-
+  reimburseServiceProviders:
+    handler: handler.reimburseServiceProviders
+    events:
+      - http:
+          path: service_provider/reimburse
+          method: post
+          cors: true
+  queryReimbursementStatus:
+    handler: handler.queryReimbursementStatus
+    events:
+      - http:
+          path: service_provider/reimbursement/{datetime}
+          method: get
+          cors: true

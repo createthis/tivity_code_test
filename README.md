@@ -38,6 +38,20 @@ curl -X POST http://localhost:3000/dev/service_provider/activity \
   -d '{"activities": [{"member_id": 1, "activity_date": "2024-02-01T00:00:00Z", "description": "Test Activity", "value": 100.00}]}'
 ```
 
+### reimburseServiceProviders
+```bash
+curl -X POST http://localhost:3000/dev/service_provider/reimburse
+```
+
+### queryReimbursementStatus
+
+DATETIME should be given in UTC, like 2024-03-28T23:24:11.666
+
+```bash
+curl -X GET http://localhost:3000/dev/service_provider/reimbursement/DATETIME \
+  -H 'Authorization: Bearer YOUR_JWT_TOKEN'
+```
+
 ## create migrations
 Migrations are used as change control on the database.
 
