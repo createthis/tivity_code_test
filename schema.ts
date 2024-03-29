@@ -54,6 +54,7 @@ export const typeDefs = `#graphql
   type Reimbursement {
     reimbursement_id: ID!
     service_provider_id: Int!
+    service_provider: ServiceProvider
     cycle_start_date: String!
     cycle_end_date: String!
     total_activity_value: Float!

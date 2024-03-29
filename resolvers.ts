@@ -12,6 +12,10 @@ export const resolvers = {
       const cycleDate = moment.utc(datetime).toDate();
       try {
         const reimbursement = await Models.reimbursements.findOne({
+          include: [{
+            model: Models.service_providers,
+            required: true,
+          }],
           where: {
             service_provider_id,
             cycle_start_date: {

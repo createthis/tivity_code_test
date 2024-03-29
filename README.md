@@ -103,6 +103,27 @@ curl -X POST \
   http://localhost:3000/graphql
 ```
 
+Another example with an included association to `service_provider`:
+
+```graphql
+query {
+  serviceProviderReimbursementStatus(datetime: "2024-03-28T23:24:11.666") {
+    reimbursement_id
+    service_provider {
+      name
+    }
+  }
+}
+```
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  --data '{"query": "query { serviceProviderReimbursementStatus(datetime: \"2024-03-28T23:24:11.666\") { reimbursement_id service_provider { name } } }"}' \
+  http://localhost:3000/graphql
+```
+
+
 ## create migrations
 Migrations are used as change control on the database.
 
