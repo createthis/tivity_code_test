@@ -55,9 +55,35 @@ curl -X GET http://localhost:3000/dev/service_provider/reimbursement/DATETIME \
 ### GraphQL endpoint
 We can also use GraphQL to access our data.
 
-#### Query Reimbursements
+#### registerServiceProviderMembers
 ```graphql
-{
+mutation {
+  registerServiceProviderMembers(
+    members: [
+      {
+        name: "John Doe",
+        registration_date: "2023-03-29T12:34:56Z"
+      }
+    ]
+  ) {
+    member_id
+    name
+    registration_date
+  }
+}
+```
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  --data '{"query": "mutation { registerServiceProviderMembers(members: [{name: \"John Doe\", registration_date: \"2023-03-29T12:34:56Z\"}]) { member_id name registration_date } }"}' \
+  http://localhost:3000/graphql
+```
+
+#### serviceProviderReimbursementStatus
+This is the GraphQL version of `queryReimbursementStatus`, above. Sorry for not using the same name.
+```graphql
+query {
   serviceProviderReimbursementStatus(datetime: "2024-03-28T23:24:11.666") {
     reimbursement_id
     cycle_start_date

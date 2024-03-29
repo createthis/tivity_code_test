@@ -34,4 +34,30 @@ export const resolvers = {
       }
     },
   },
+  Mutation: {
+    registerServiceProviderMembers: async (root, args, context) => {
+      const { members } = args;
+      const service_provider_id = context.service_provider_id;
+
+      // Assume validation of service_provider_id and members input occurs here
+
+      try {
+        // Create members in the database
+        const createdMembers = await Promise.all(members.map(async (member) => {
+          // Add logic to create each member in the database
+          // This example assumes you have a function to create a member and return the created member object
+          return await Models.members.create({
+            ...member,
+            service_provider_id,
+            status: 'active', // Assuming all new members are active
+          });
+        }));
+
+        return createdMembers;
+      } catch (error) {
+        console.error('Error registering service provider members:', error);
+        throw new Error('Failed to register members');
+      }
+    },
+  },
 };

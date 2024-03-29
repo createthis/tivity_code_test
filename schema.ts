@@ -66,4 +66,13 @@ export const typeDefs = `#graphql
   type Query {
     serviceProviderReimbursementStatus(datetime: String!): Reimbursement
   }
+
+  input MemberInput {
+    name: String!
+    registration_date: String!
+  }
+
+  type Mutation {
+    registerServiceProviderMembers(members: [MemberInput!]!): [Member]
+  }
 `;
