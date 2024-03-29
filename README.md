@@ -52,6 +52,31 @@ curl -X GET http://localhost:3000/dev/service_provider/reimbursement/DATETIME \
   -H 'Authorization: Bearer YOUR_JWT_TOKEN'
 ```
 
+### GraphQL endpoint
+We can also use GraphQL to access our data.
+
+#### Query Reimbursements
+```graphql
+{
+  serviceProviderReimbursementStatus(datetime: "2024-03-28T23:24:11.666") {
+    reimbursement_id
+    cycle_start_date
+    cycle_end_date
+    total_activity_value
+    reimbursed_amount
+    status
+    processed_at
+  }
+}
+```
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  --data '{"query": "query { serviceProviderReimbursementStatus(datetime: \"2024-03-28T23:24:11.666\") { reimbursement_id cycle_start_date cycle_end_date total_activity_value reimbursed_amount status processed_at } }"}' \
+  http://localhost:3000/graphql
+```
+
 ## create migrations
 Migrations are used as change control on the database.
 

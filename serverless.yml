@@ -58,3 +58,12 @@ functions:
           path: service_provider/reimbursement/{datetime}
           method: get
           cors: true
+  graphql:
+    handler: graphql_handler.graphqlHandler
+    events:
+      - httpApi:
+          path: /graphql
+          method: POST
+      - httpApi:
+          path: /graphql
+          method: GET

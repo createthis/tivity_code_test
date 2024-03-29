@@ -1,3 +1,4 @@
+// This js file exists because sequelize-cli is not TypeScript compatible yet and cannot read config.ts.
 module.exports = {
     development: {
         dialect: "sqlite",
