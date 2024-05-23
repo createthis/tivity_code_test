@@ -1,6 +1,19 @@
 # tivity_code_test
 
 ## Getting Started
+
+### dot-env
+Create a new file in the project root called `.env`:
+```bash
+vim .env
+```
+
+Populate it with this data, changing the `foo` to whatever you want. This will be your private key for your JWT.
+```bash
+PRIVATE_KEY='foo'
+```
+
+### npm
 ```bash
 npm install
 npm test

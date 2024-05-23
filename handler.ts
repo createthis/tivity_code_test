@@ -39,7 +39,7 @@ export const getJWT: APIGatewayProxyHandler = async (event) => {
     const token = jwt.sign({ service_provider_id }, process.env.PRIVATE_KEY);
     return token;
   } catch (error) {
-    console.error(`Error signing JWT for service_provider_id=${service_provider_id}`, error);
+    console.error(`Error signing JWT for service_provider_id=${event.pathParameters.service_provider_id}`, error);
     return {
       statusCode: 500,
       body: JSON.stringify({
